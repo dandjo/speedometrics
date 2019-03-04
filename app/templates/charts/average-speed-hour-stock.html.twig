@@ -1,0 +1,50 @@
+{% extends 'charts/base.html.twig' %}
+
+
+{% block head %}
+    {{ parent() }}
+    <title>Average Speed</title>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-core.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-stock.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-annotations.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
+    <script>
+        anychart.onDocumentReady(function () {
+            var dataTable = anychart.data.table();
+            var mapping = dataTable.mapAs();
+            mapping.addField('value', 0.5);
+            var chart = anychart.stock();
+            var plot = chart.plot(0);
+            var lineSeries = plot.line(mapping);
+            var controller = plot.annotations();
+            controller.horizontalLine({
+                valueAnchor: 30
+            });
+            controller.horizontalLine({
+                valueAnchor: 50
+            });
+
+            var xhr = new XMLHttpRequest();
+            var urlParams = new URLSearchParams(window.location.search);
+            xhr.open('GET', '/api/timeline/average-speed/hour?' + urlParams, true);
+            xhr.responseType = 'json';
+            xhr.onload = function() {
+                var status = xhr.status;
+                if (status === 200) {
+                    lineSeries.name(document.title);
+                    document.title = document.title + ' ' + xhr.response.data.address.display;
+                    chart.title(document.title);
+                    dataTable.addData(xhr.response.data.chart.data);
+                }
+            };
+            xhr.send();
+
+            chart.container('container');
+            chart.draw();
+        });
+    </script>
+{% endblock %}

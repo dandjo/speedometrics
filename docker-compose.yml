@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+    web:
+        image: nginx:1.15
+        depends_on:
+            - php
+        volumes:
+            - ./app:/app
+            - ./config/nginx.conf:/etc/nginx/conf.d/default.conf
+        labels:
+            - 'traefik.backend=web'
+            - 'traefik.port=80'
+            - 'traefik.frontend.rule=Host:speedometrics.localhost'
+    web-debug:
+        image: nginx:1.15
+        depends_on:
+            - php-debug
+        volumes:
+            - ./app:/app
+            - ./config/nginx-debug.conf:/etc/nginx/conf.d/default.conf
+        labels:
+            - 'traefik.backend=web-debug'
+            - 'traefik.port=80'
+            - 'traefik.frontend.rule=Host:debug.speedometrics.localhost'
+    php:
+        build:
+            dockerfile: php:7.2-fpm.dockerfile
+            context: .
+        volumes:
+            - ./app:/app
+    php-debug:
+        build:
+            dockerfile: php:7.2-fpm-debug.dockerfile
+            context: .
+        volumes:
+            - ./app:/app
+            - ./config/xdebug.ini:/usr/local/etc/php/conf.d/99-xdebug.ini
+    traefik:
+        image: traefik
+        command: -c /dev/null --web --docker --logLevel=INFO
+        ports:
+            - '80:80' # App
+            - '81:8080' # Dashboard
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
