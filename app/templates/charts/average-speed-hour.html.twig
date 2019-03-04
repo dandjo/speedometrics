@@ -16,7 +16,7 @@
                 if (xhr.status === 200) {
                     var series = chart.line(xhr.response.data.series);
                     series.name(document.title);
-                    document.title = document.title + ' ' + xhr.response.data.address.display;
+                    document.title = document.title + ' - ' + xhr.response.data.address.display;
                     chart.title(document.title);
                 }
             });

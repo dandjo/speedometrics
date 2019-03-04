@@ -14,7 +14,7 @@
             var urlParams = new URLSearchParams(window.location.search);
             app.getjson('{{ path('api.speed-categories') }}?' + urlParams, function(xhr) {
                 if (xhr.status === 200) {
-                    document.title = document.title + ' ' + xhr.response.data.address.display;
+                    document.title = document.title + ' - ' + xhr.response.data.address.display;
                     chart.title(document.title);
                     chart.data(xhr.response.data.series);
                 }

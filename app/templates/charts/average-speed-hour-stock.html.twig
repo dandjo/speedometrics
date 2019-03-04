@@ -2,7 +2,7 @@
 
 {% block head %}
     {{ parent() }}
-    <title>Average Speed</title>
+    <title>Average Speed Stock</title>
 {% endblock %}
 
 {% block javascripts %}
@@ -31,7 +31,7 @@
             app.getjson('{{ path('api.average-speed.hour') }}?' + urlParams, function(xhr) {
                 if (xhr.status === 200) {
                     lineSeries.name(document.title);
-                    document.title = document.title + ' ' + xhr.response.data.address.display;
+                    document.title = document.title + ' - ' + xhr.response.data.address.display;
                     chart.title(document.title);
                     dataTable.addData(xhr.response.data.series);
                 }
