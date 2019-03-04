@@ -91,7 +91,7 @@ class ExcelImport extends Command
         $adapter = new Local($directory);
         $filesystem = new Filesystem($adapter);
         foreach ($filesystem->listContents() as $file) {
-            if ($file['type'] === 'file' && $file['extension'] === 'xls') {
+            if ($file['type'] === 'file' && isset($file['extension']) && $file['extension'] === 'xls') {
                 $this->importFile($directory . DIRECTORY_SEPARATOR . $file['path'], $address);
             }
         }
