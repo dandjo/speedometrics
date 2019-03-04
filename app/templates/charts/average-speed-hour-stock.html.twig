@@ -23,7 +23,7 @@
             app.getseries = function(addressId) {
                 var urlParams = new URLSearchParams(window.location.search);
                 urlParams.set('address', addressId);
-                app.getjson('{{ path('api.average-speed.hour') }}?' + urlParams, function(xhr) {
+                ajax.getJson('{{ path('api.average-speed.hour') }}?' + urlParams, function(xhr) {
                     document.title = 'Average Speed Stock - ' + xhr.response.data.address.display;
                     lineSeries.name(document.title);
                     chart.title(document.title);

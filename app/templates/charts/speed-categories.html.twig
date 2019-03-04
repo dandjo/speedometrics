@@ -11,7 +11,7 @@
             app.getseries = function(addressId) {
                 var urlParams = new URLSearchParams(window.location.search);
                 urlParams.set('address', addressId);
-                app.getjson('{{ path('api.speed-categories') }}?' + urlParams, function(xhr) {
+                ajax.getJson('{{ path('api.speed-categories') }}?' + urlParams, function(xhr) {
                     document.title = 'Speed Categories - ' + xhr.response.data.address.display;
                     chart.title(document.title);
                     chart.data(xhr.response.data.series);

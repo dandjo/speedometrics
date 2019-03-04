@@ -100,6 +100,21 @@
     <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script>
+        var ajax = ajax || {};
+        ajax.getJson = function(url, success, error) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('get', url, true);
+            xhr.responseType = 'json';
+            xhr.onload = function() {
+                if (typeof success === 'function' && xhr.status === 200) {
+                    return success(xhr);
+                }
+                if (typeof error === 'function') {
+                    return error(xhr);
+                }
+            };
+            xhr.send();
+        };
         var app = new Vue({
             el: '#app',
             delimiters: ['${', '}'],
@@ -110,20 +125,6 @@
                 addressId: null,
             },
             methods: {
-                getjson: function(url, success, error) {
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('get', url, true);
-                    xhr.responseType = 'json';
-                    xhr.onload = function() {
-                        if (typeof success === 'function' && xhr.status === 200) {
-                            return success(xhr);
-                        }
-                        if (typeof error === 'function') {
-                            return error(xhr);
-                        }
-                    };
-                    xhr.send();
-                },
                 getseries: function(addressId) {
                     return [];
                 }
@@ -138,10 +139,10 @@
             },
             created: function() {
                 var self = this;
-                self.getjson('{{ path('api.menu') }}', function(xhr) {
+                ajax.getJson('{{ path('api.menu') }}', function(xhr) {
                     self.menu = xhr.response.data.items;
                 });
-                self.getjson('{{ path('api.addresses') }}', function(xhr) {
+                ajax.getJson('{{ path('api.addresses') }}', function(xhr) {
                     self.addresses = xhr.response.data.addresses;
                     self.addressId = self.addresses[0].id;
                 });
