@@ -12,7 +12,6 @@ Symfony 4 application for importing and aggregating data measured by stationary 
 
 ## Installation with Docker Compose
 
-    $ docker-compose up --build
     $ docker-compose run php composer install -d /app
     $ docker-compose run php mkdir /app/var/store
     $ docker-compose run php /app/bin/console -n doctrine:database:create
@@ -35,5 +34,7 @@ root at `/docker-host/`. The path to your home directory therefore usually is
 
 ## Frontend
 
-- http://speedometricts.localhost/charts/average-speed-hour?from=2016-04-01&to=2016-05-01
-- http://debug.speedometrics.localhost/charts/speed-categories?from=2016-04-01&to=2016-05-01
+    $ docker-compose up
+
+The frontend is available at http://speedometricts.localhost or with xdebug
+extension enabled at http://debug.speedometrics.localhost.
