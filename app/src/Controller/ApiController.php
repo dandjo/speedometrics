@@ -41,11 +41,11 @@ class ApiController extends AbstractController
      */
     public function menu(): Response
     {
-        return $this->json(['data' => [
+        return $this->json(['data' => ['items' => [
             ['link' => $this->generateUrl('charts.speed-categories'), 'title' => 'Speed Categories'],
             ['link' => $this->generateUrl('charts.average-speed.hour'), 'title' => 'Average Speed'],
             ['link' => $this->generateUrl('charts.average-speed.hour.stock'), 'title' => 'Average Speed Stock'],
-        ]]);
+        ]]]);
     }
 
     /**
@@ -85,7 +85,7 @@ class ApiController extends AbstractController
                 ->setParameter('from', Carbon::createFromFormat('Y-m-d', $dateFrom))
                 ->setParameter('to', Carbon::createFromFormat('Y-m-d', $dateTo));
         }
-        $response['data']['chart']['data'] = array_map(function($result) {
+        $response['data']['series'] = array_map(function($result) {
             $avgSpeed = $result['amountVehicles'] > 0
                 ? round($result['speedProducts'] / $result['amountVehicles'], 2)
                 : null;
@@ -124,7 +124,7 @@ class ApiController extends AbstractController
                 ->setParameter('from', Carbon::createFromFormat('Y-m-d', $dateFrom))
                 ->setParameter('to', Carbon::createFromFormat('Y-m-d', $dateTo));
         }
-        $response['data']['chart']['data'] = array_map(function($result) {
+        $response['data']['series'] = array_map(function($result) {
             return [$result['range'], intval($result['amountVehicles'])];
         }, $qb->getQuery()->getResult());
         return $this->json($response);
