@@ -9,6 +9,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     /**
+     * @Route("/", name="root")
+     */
+    public function root()
+    {
+        return $this->redirectToRoute('charts');
+    }
+
+    /**
      * @Route("/phpinfo", name="phpinfo")
      */
     public function phpinfo()
