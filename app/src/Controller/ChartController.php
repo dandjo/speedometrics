@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ChartController extends AbstractController
 {
     /**
-     * @Route("/", name="charts")
+     * @Route(name="charts")
      */
     public function charts()
     {
