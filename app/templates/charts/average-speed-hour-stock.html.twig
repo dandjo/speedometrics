@@ -1,18 +1,9 @@
 {% extends 'charts/base.html.twig' %}
 
-{% block head %}
-    {{ parent() }}
-    <title>Average Speed Stock</title>
-{% endblock %}
-
 {% block javascripts %}
     {{ parent() }}
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-core.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-stock.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-annotations.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
     <script>
-        anychart.onDocumentReady(function () {
+        anychart.onDocumentReady(function() {
             var dataTable = anychart.data.table();
             var mapping = dataTable.mapAs();
             mapping.addField('value', 0.5);
@@ -29,9 +20,9 @@
             chart.container('chart');
             chart.autoRedraw();
 
-            app.getseries = function(address) {
+            app.getseries = function(addressId) {
                 var urlParams = new URLSearchParams(window.location.search);
-                urlParams.set('address', address);
+                urlParams.set('address', addressId);
                 app.getjson('{{ path('api.average-speed.hour') }}?' + urlParams, function(xhr) {
                     document.title = 'Average Speed Stock - ' + xhr.response.data.address.display;
                     lineSeries.name(document.title);

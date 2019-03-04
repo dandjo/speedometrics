@@ -1,10 +1,5 @@
 {% extends 'charts/base.html.twig' %}
 
-{% block head %}
-    {{ parent() }}
-    <title>Average Speed</title>
-{% endblock %}
-
 {% block javascripts %}
     {{ parent() }}
     <script>
@@ -14,9 +9,9 @@
             chart.autoRedraw();
             var series = chart.line();
 
-            app.getseries = function(address) {
+            app.getseries = function(addressId) {
                 var urlParams = new URLSearchParams(window.location.search);
-                urlParams.set('address', address);
+                urlParams.set('address', addressId);
                 app.getjson('{{ path('api.average-speed.hour') }}?' + urlParams, function(xhr) {
                     series.data(xhr.response.data.series);
                     document.title = 'Average Speed - ' + xhr.response.data.address.display;

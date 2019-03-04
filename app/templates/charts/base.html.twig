@@ -1,9 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block head %}
+    <title>Speedometrics</title>
     <link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css" rel="stylesheet" type="text/css">
     <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.css" rel="stylesheet" type="text/css">
     <style>
+        [v-cloak] {
+            visibility: hidden;
+        }
+
         html, body, #app {
             width: 100%;
             height: 100%;
@@ -72,11 +77,11 @@
     <div id="app">
         <div id="menu">
             <ul>
-                <li v-for="item in menu" v-bind:class="{ 'active': item.link == '{{ path(app.request.attributes.get('_route')) }}' }">
+                <li v-cloak v-for="item in menu" v-bind:class="{ 'active': item.link == '{{ path(app.request.attributes.get('_route')) }}' }">
                     <a :href="item.link">${ item.title }</a>
                 </li>
-                <li class="addresses">
-                    <select name="address" v-model="address">
+                <li v-cloak class="addresses">
+                    <select name="address" v-model="addressId">
                         <option v-for="address in addresses" :value="address.id">${ address.display }</option>
                     </select>
                 </li>
@@ -87,6 +92,12 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-core.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-stock.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-annotations.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script>
         var app = new Vue({
@@ -96,7 +107,7 @@
                 menu: [],
                 addresses: [],
                 series: [],
-                address: null,
+                addressId: null,
             },
             methods: {
                 getjson: function(url, success, error) {
@@ -113,13 +124,16 @@
                     };
                     xhr.send();
                 },
-                getseries: function(address) {
+                getseries: function(addressId) {
                     return [];
                 }
             },
             watch: {
-                address: function(address) {
-                    this.getseries(address);
+                addressId: function(addressId) {
+                    var self = this;
+                    anychart.onDocumentReady(function() {
+                        self.getseries(addressId);
+                    });
                 }
             },
             created: function() {
@@ -129,12 +143,9 @@
                 });
                 self.getjson('{{ path('api.addresses') }}', function(xhr) {
                     self.addresses = xhr.response.data.addresses;
-                    self.address = self.addresses[0].id;
+                    self.addressId = self.addresses[0].id;
                 });
-                self.getseries(self.address);
             }
         });
     </script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
 {% endblock %}

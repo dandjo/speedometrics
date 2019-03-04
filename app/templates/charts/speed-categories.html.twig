@@ -1,10 +1,5 @@
 {% extends 'charts/base.html.twig' %}
 
-{% block head %}
-    {{ parent() }}
-    <title>Speed Categories</title>
-{% endblock %}
-
 {% block javascripts %}
     {{ parent() }}
     <script>
@@ -13,9 +8,9 @@
             chart.container('chart');
             chart.autoRedraw();
 
-            app.getseries = function(address) {
+            app.getseries = function(addressId) {
                 var urlParams = new URLSearchParams(window.location.search);
-                urlParams.set('address', address);
+                urlParams.set('address', addressId);
                 app.getjson('{{ path('api.speed-categories') }}?' + urlParams, function(xhr) {
                     document.title = 'Speed Categories - ' + xhr.response.data.address.display;
                     chart.title(document.title);
