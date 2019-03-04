@@ -7,6 +7,8 @@ services:
             - php
         volumes:
             - ./app:/app
+            - ./config/nginx-base.conf:/etc/nginx/base.conf
+            - ./config/nginx-fastcgi.conf:/etc/nginx/fastcgi.conf
             - ./config/nginx.conf:/etc/nginx/conf.d/default.conf
         labels:
             - 'traefik.backend=web'
@@ -18,6 +20,8 @@ services:
             - php-debug
         volumes:
             - ./app:/app
+            - ./config/nginx-base.conf:/etc/nginx/base.conf
+            - ./config/nginx-fastcgi.conf:/etc/nginx/fastcgi.conf
             - ./config/nginx-debug.conf:/etc/nginx/conf.d/default.conf
         labels:
             - 'traefik.backend=web-debug'
