@@ -12,15 +12,15 @@
             var chart = anychart.pie();
 
             var urlParams = new URLSearchParams(window.location.search);
-            app.getjson('{{ path('api.speed-categories') }}' + urlParams, function(xhr) {
+            app.getjson('{{ path('api.speed-categories') }}?' + urlParams, function(xhr) {
                 if (xhr.status === 200) {
                     document.title = document.title + ' ' + xhr.response.data.address.display;
                     chart.title(document.title);
-                    chart.data(xhr.response.data.chart.data);
+                    chart.data(xhr.response.data.series);
                 }
             });
 
-            chart.container('container');
+            chart.container('chart');
             chart.draw();
         });
     </script>

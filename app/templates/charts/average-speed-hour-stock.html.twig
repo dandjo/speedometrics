@@ -1,6 +1,5 @@
 {% extends 'charts/base.html.twig' %}
 
-
 {% block head %}
     {{ parent() }}
     <title>Average Speed</title>
@@ -29,16 +28,16 @@
             });
 
             var urlParams = new URLSearchParams(window.location.search);
-            app.getjson('{{ path('api.average-speed.hour') }}' + urlParams, function(xhr) {
+            app.getjson('{{ path('api.average-speed.hour') }}?' + urlParams, function(xhr) {
                 if (xhr.status === 200) {
                     lineSeries.name(document.title);
                     document.title = document.title + ' ' + xhr.response.data.address.display;
                     chart.title(document.title);
-                    dataTable.addData(xhr.response.data.chart.data);
+                    dataTable.addData(xhr.response.data.series);
                 }
             });
 
-            chart.container('container');
+            chart.container('chart');
             chart.draw();
         });
     </script>

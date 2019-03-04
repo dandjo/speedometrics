@@ -12,16 +12,16 @@
             var chart = anychart.line();
 
             var urlParams = new URLSearchParams(window.location.search);
-            app.getjson('{{ path('api.average-speed.hour') }}' + urlParams, function(xhr) {
+            app.getjson('{{ path('api.average-speed.hour') }}?' + urlParams, function(xhr) {
                 if (xhr.status === 200) {
-                    var series = chart.line(xhr.response.data.chart.data);
+                    var series = chart.line(xhr.response.data.series);
                     series.name(document.title);
                     document.title = document.title + ' ' + xhr.response.data.address.display;
                     chart.title(document.title);
                 }
             });
 
-            chart.container('container');
+            chart.container('chart');
             chart.draw();
         });
     </script>
