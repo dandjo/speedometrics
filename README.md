@@ -25,7 +25,7 @@ Symfony 4 application for importing and aggregating data measured by stationary 
 
 ## Import Data with Docker Compose
 
-To access your host filesystem we created a mountpoint of the host filesystem's
+To access your host filesystem we created a mountpoint of the host filesystem
 root at `/docker-host/`. The path to your home directory therefore usually is
 `/docker-host/home/your-username/`.
 
