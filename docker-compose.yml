@@ -29,12 +29,16 @@ services:
             context: .
         volumes:
             - ./app:/app
+            - /:/docker-host
+            - ./config/php.ini:/usr/local/etc/php/conf.d/99-php.ini
     php-debug:
         build:
             dockerfile: php:7.2-fpm-debug.dockerfile
             context: .
         volumes:
             - ./app:/app
+            - /:/docker-host
+            - ./config/php.ini:/usr/local/etc/php/conf.d/99-php.ini
             - ./config/xdebug.ini:/usr/local/etc/php/conf.d/99-xdebug.ini
     traefik:
         image: traefik
