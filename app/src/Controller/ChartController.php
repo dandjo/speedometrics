@@ -11,6 +11,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class ChartController extends AbstractController
 {
     /**
+     * @Route("/", name="charts")
+     */
+    public function charts()
+    {
+        return $this->render('charts/base.html.twig');
+    }
+
+    /**
      * @Route("/average-speed/hour", name="charts.average-speed.hour")
      */
     public function averageSpeedPerHour()
