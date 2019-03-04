@@ -20,9 +20,18 @@ Symfony 4 application for importing and aggregating data measured by stationary 
 
 ## Import Data
 
-    $ php bin/console import:excel /path/to/excels "street name" "house number" "zip code" "city name"
+    $ php bin/console import:excel /path/to/excels \
+      "street name" "house number" "zip code" "city name"
 
-    $ docker-compose run php /app/bin/console import:excel /path/to/excels "street name" "house number" "zip code" "city name"
+## Import Data with Docker Compose
+
+To access your host filesystem we created a mountpoint of the host filesystem's
+root at `/docker-host/`. The path to your home directory therefore usually is
+`/docker-host/home/your-username/`.
+
+    $ docker-compose run php /app/bin/console import:excel \
+      /docker-host/path/to/excels \
+      "street name" "house number" "zip code" "city name"
 
 ## Frontend
 
