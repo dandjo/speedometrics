@@ -34,6 +34,12 @@ root at `/docker-host/`. The path to your home directory therefore usually is
 
 ## Frontend
 
+    $ php bin/console server:run
+    
+The frontend is available at http://127.0.0.1:8000.
+
+## Frontend with Docker Compose
+
     $ docker-compose up
 
 The frontend is available at http://speedometricts.localhost or with xdebug
