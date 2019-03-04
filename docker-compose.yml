@@ -29,7 +29,7 @@ services:
             - 'traefik.frontend.rule=Host:debug.speedometrics.localhost'
     php:
         build:
-            dockerfile: php:7.2-fpm.dockerfile
+            dockerfile: php.dockerfile
             context: .
         volumes:
             - ./app:/app
@@ -37,7 +37,7 @@ services:
             - ./config/php.ini:/usr/local/etc/php/conf.d/99-php.ini
     php-debug:
         build:
-            dockerfile: php:7.2-fpm-debug.dockerfile
+            dockerfile: php-debug.dockerfile
             context: .
         volumes:
             - ./app:/app
