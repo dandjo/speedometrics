@@ -11,20 +11,15 @@
         anychart.onDocumentReady(function() {
             var chart = anychart.line();
 
-            var xhr = new XMLHttpRequest();
             var urlParams = new URLSearchParams(window.location.search);
-            xhr.open('GET', '/api/timeline/average-speed/hour?' + urlParams, true);
-            xhr.responseType = 'json';
-            xhr.onload = function() {
-                var status = xhr.status;
-                if (status === 200) {
+            app.getjson('{{ path('api.average-speed.hour') }}' + urlParams, function(xhr) {
+                if (xhr.status === 200) {
                     var series = chart.line(xhr.response.data.chart.data);
                     series.name(document.title);
                     document.title = document.title + ' ' + xhr.response.data.address.display;
                     chart.title(document.title);
                 }
-            };
-            xhr.send();
+            });
 
             chart.container('container');
             chart.draw();

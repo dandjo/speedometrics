@@ -11,19 +11,14 @@
         anychart.onDocumentReady(function() {
             var chart = anychart.pie();
 
-            var xhr = new XMLHttpRequest();
             var urlParams = new URLSearchParams(window.location.search);
-            xhr.open('GET', '/api/pie/speed-categories?' + urlParams, true);
-            xhr.responseType = 'json';
-            xhr.onload = function() {
-                var status = xhr.status;
-                if (status === 200) {
+            app.getjson('{{ path('api.speed-categories') }}' + urlParams, function(xhr) {
+                if (xhr.status === 200) {
                     document.title = document.title + ' ' + xhr.response.data.address.display;
                     chart.title(document.title);
                     chart.data(xhr.response.data.chart.data);
                 }
-            };
-            xhr.send();
+            });
 
             chart.container('container');
             chart.draw();

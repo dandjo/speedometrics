@@ -11,17 +11,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class ChartController extends AbstractController
 {
     /**
-     * @Route("/average-speed-hour", name="charts.average-speed.hour")
+     * @Route("/average-speed/hour", name="charts.average-speed.hour")
      */
-    public function averageSpeed()
+    public function averageSpeedPerHour()
     {
         return $this->render('charts/average-speed-hour.html.twig');
     }
 
     /**
-     * @Route("/average-speed-hour/stock", name="charts.average-speed.hour.stock")
+     * @Route("/average-speed/hour/stock", name="charts.average-speed.hour.stock")
      */
-    public function averageSpeedStock()
+    public function averageSpeedPerHourStock()
     {
         return $this->render('charts/average-speed-hour-stock.html.twig');
     }

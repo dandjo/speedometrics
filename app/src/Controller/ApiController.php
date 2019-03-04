@@ -36,11 +36,24 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/timeline/average-speed/hour", name="api.timeline.average-speed.hour")
+     * @Route("/menu", name="api.menu")
+     * @return Response
+     */
+    public function menu(): Response
+    {
+        return $this->json(['data' => [
+            ['link' => $this->generateUrl('charts.speed-categories'), 'title' => 'Speed Categories'],
+            ['link' => $this->generateUrl('charts.average-speed.hour'), 'title' => 'Average Speed'],
+            ['link' => $this->generateUrl('charts.average-speed.hour.stock'), 'title' => 'Average Speed Stock'],
+        ]]);
+    }
+
+    /**
+     * @Route("/average-speed/hour", name="api.average-speed.hour")
      * @param Request $request
      * @return Response
      */
-    public function timelineAverageSpeedPerHour(Request $request): Response
+    public function averageSpeedPerHour(Request $request): Response
     {
         // Disclaimer: We assume the driven speed per measurement to be the
         // average of the speed category's rangeFrom and rangeTo.
@@ -82,11 +95,11 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/pie/speed-categories", name="api.pie.speed-categories")
+     * @Route("/speed-categories", name="api.speed-categories")
      * @param Request $request
      * @return Response
      */
-    public function pieSpeedCategories(Request $request): Response
+    public function speedCategories(Request $request): Response
     {
         $response = ['data' => []];
         $address = (new AddressRepository($this->doctrine))->findOneBy([

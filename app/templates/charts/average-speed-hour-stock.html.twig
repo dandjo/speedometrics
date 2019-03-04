@@ -28,20 +28,15 @@
                 valueAnchor: 50
             });
 
-            var xhr = new XMLHttpRequest();
             var urlParams = new URLSearchParams(window.location.search);
-            xhr.open('GET', '/api/timeline/average-speed/hour?' + urlParams, true);
-            xhr.responseType = 'json';
-            xhr.onload = function() {
-                var status = xhr.status;
-                if (status === 200) {
+            app.getjson('{{ path('api.average-speed.hour') }}' + urlParams, function(xhr) {
+                if (xhr.status === 200) {
                     lineSeries.name(document.title);
                     document.title = document.title + ' ' + xhr.response.data.address.display;
                     chart.title(document.title);
                     dataTable.addData(xhr.response.data.chart.data);
                 }
-            };
-            xhr.send();
+            });
 
             chart.container('container');
             chart.draw();
