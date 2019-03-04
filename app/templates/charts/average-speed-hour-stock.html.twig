@@ -26,18 +26,20 @@
             controller.horizontalLine({
                 valueAnchor: 50
             });
+            chart.container('chart');
+            chart.autoRedraw();
 
-            var urlParams = new URLSearchParams(window.location.search);
-            app.getjson('{{ path('api.average-speed.hour') }}?' + urlParams, function(xhr) {
-                if (xhr.status === 200) {
+            app.getseries = function(address) {
+                var urlParams = new URLSearchParams(window.location.search);
+                urlParams.set('address', address);
+                app.getjson('{{ path('api.average-speed.hour') }}?' + urlParams, function(xhr) {
+                    document.title = 'Average Speed Stock - ' + xhr.response.data.address.display;
                     lineSeries.name(document.title);
-                    document.title = document.title + ' - ' + xhr.response.data.address.display;
                     chart.title(document.title);
                     dataTable.addData(xhr.response.data.series);
-                }
-            });
+                });
+            };
 
-            chart.container('chart');
             chart.draw();
         });
     </script>

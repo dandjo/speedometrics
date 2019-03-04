@@ -49,6 +49,19 @@ class ApiController extends AbstractController
     }
 
     /**
+     * @Route("/addresses", name="api.addresses")
+     * @return Response
+     */
+    public function addresses(): Response
+    {
+        $addresses = (new AddressRepository($this->doctrine))->findAll();
+        $response['data']['addresses'] = array_map(function($address) {
+            return $this->serializeAddress($address);
+        }, $addresses);
+        return $this->json($response);
+    }
+
+    /**
      * @Route("/average-speed/hour", name="api.average-speed.hour")
      * @param Request $request
      * @return Response
@@ -58,11 +71,8 @@ class ApiController extends AbstractController
         // Disclaimer: We assume the driven speed per measurement to be the
         // average of the speed category's rangeFrom and rangeTo.
         $response = ['data' => []];
-        $address = (new AddressRepository($this->doctrine))->findOneBy([
-            'street' => 'Cumberlandstrasse',
-            'number' => '47',
-            'zip' => '1140',
-        ]);
+        $addressId = $request->query->get('address');
+        $address = (new AddressRepository($this->doctrine))->find($addressId);
         $response['data']['address'] = $this->serializeAddress($address);
         $dateFrom = $request->query->get('from');
         $dateTo = $request->query->get('to');
@@ -102,11 +112,8 @@ class ApiController extends AbstractController
     public function speedCategories(Request $request): Response
     {
         $response = ['data' => []];
-        $address = (new AddressRepository($this->doctrine))->findOneBy([
-            'street' => 'Cumberlandstrasse',
-            'number' => '47',
-            'zip' => '1140',
-        ]);
+        $addressId = $request->query->get('address');
+        $address = (new AddressRepository($this->doctrine))->find($addressId);
         $response['data']['address'] = $this->serializeAddress($address);
         $dateFrom = $request->query->get('from');
         $dateTo = $request->query->get('to');
@@ -137,6 +144,7 @@ class ApiController extends AbstractController
     protected function serializeAddress(Address $address): array
     {
         return [
+            'id' => $address->getId(),
             'street' => $address->getStreet(),
             'number' => $address->getNumber(),
             'city' => $address->getCity(),

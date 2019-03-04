@@ -11,7 +11,7 @@
             padding: 0;
         }
 
-        html, input {
+        html, input, select {
             font-family: Verdana,sans-serif;
             font-size: 15px;
             line-height: 1.5;
@@ -46,15 +46,14 @@
         #menu li.active {
             background-color: #4CAF50;
         }
-        #menu li.search {
+        #menu li.addresses {
             float: right;
         }
-        #menu li.search input {
+        #menu li.addresses select {
             display: block;
             padding: 14px 16px;
-            width: 300px;
-            border: 0;
-            background: #e8e8e8;
+            border: 1px solid #fbfbfb;
+            background: #fbfbfb;
         }
         #menu li a {
             display: block;
@@ -76,8 +75,10 @@
                 <li v-for="item in menu" v-bind:class="{ 'active': item.link == '{{ path(app.request.attributes.get('_route')) }}' }">
                     <a :href="item.link">${ item.title }</a>
                 </li>
-                <li class="search">
-                    <input type="text" name="search">
+                <li class="addresses">
+                    <select name="address" v-model="address">
+                        <option v-for="address in addresses" :value="address.id">${ address.display }</option>
+                    </select>
                 </li>
             </ul>
         </div>
@@ -92,24 +93,45 @@
             el: '#app',
             delimiters: ['${', '}'],
             data: {
-                menu: []
+                menu: [],
+                addresses: [],
+                series: [],
+                address: null,
             },
             methods: {
-                getjson: function(url, callback) {
+                getjson: function(url, success, error) {
                     var xhr = new XMLHttpRequest();
                     xhr.open('get', url, true);
                     xhr.responseType = 'json';
                     xhr.onload = function() {
-                        callback(xhr);
+                        if (typeof success === 'function' && xhr.status === 200) {
+                            return success(xhr);
+                        }
+                        if (typeof error === 'function') {
+                            return error(xhr);
+                        }
                     };
                     xhr.send();
+                },
+                getseries: function(address) {
+                    return [];
                 }
-            }
-        });
-
-        app.getjson('{{ path('api.menu') }}', function(xhr) {
-            if (xhr.status === 200) {
-                app.menu = xhr.response.data.items;
+            },
+            watch: {
+                address: function(address) {
+                    this.getseries(address);
+                }
+            },
+            created: function() {
+                var self = this;
+                self.getjson('{{ path('api.menu') }}', function(xhr) {
+                    self.menu = xhr.response.data.items;
+                });
+                self.getjson('{{ path('api.addresses') }}', function(xhr) {
+                    self.addresses = xhr.response.data.addresses;
+                    self.address = self.addresses[0].id;
+                });
+                self.getseries(self.address);
             }
         });
     </script>

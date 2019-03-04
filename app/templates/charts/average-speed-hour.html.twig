@@ -10,18 +10,21 @@
     <script>
         anychart.onDocumentReady(function() {
             var chart = anychart.line();
-
-            var urlParams = new URLSearchParams(window.location.search);
-            app.getjson('{{ path('api.average-speed.hour') }}?' + urlParams, function(xhr) {
-                if (xhr.status === 200) {
-                    var series = chart.line(xhr.response.data.series);
-                    series.name(document.title);
-                    document.title = document.title + ' - ' + xhr.response.data.address.display;
-                    chart.title(document.title);
-                }
-            });
-
             chart.container('chart');
+            chart.autoRedraw();
+            var series = chart.line();
+
+            app.getseries = function(address) {
+                var urlParams = new URLSearchParams(window.location.search);
+                urlParams.set('address', address);
+                app.getjson('{{ path('api.average-speed.hour') }}?' + urlParams, function(xhr) {
+                    series.data(xhr.response.data.series);
+                    document.title = 'Average Speed - ' + xhr.response.data.address.display;
+                    series.name(document.title);
+                    chart.title(document.title);
+                });
+            };
+
             chart.draw();
         });
     </script>

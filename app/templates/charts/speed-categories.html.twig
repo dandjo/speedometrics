@@ -10,17 +10,19 @@
     <script>
         anychart.onDocumentReady(function() {
             var chart = anychart.pie();
+            chart.container('chart');
+            chart.autoRedraw();
 
-            var urlParams = new URLSearchParams(window.location.search);
-            app.getjson('{{ path('api.speed-categories') }}?' + urlParams, function(xhr) {
-                if (xhr.status === 200) {
-                    document.title = document.title + ' - ' + xhr.response.data.address.display;
+            app.getseries = function(address) {
+                var urlParams = new URLSearchParams(window.location.search);
+                urlParams.set('address', address);
+                app.getjson('{{ path('api.speed-categories') }}?' + urlParams, function(xhr) {
+                    document.title = 'Speed Categories - ' + xhr.response.data.address.display;
                     chart.title(document.title);
                     chart.data(xhr.response.data.series);
-                }
-            });
+                });
+            };
 
-            chart.container('chart');
             chart.draw();
         });
     </script>
