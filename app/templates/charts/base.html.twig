@@ -71,6 +71,13 @@
             background-color: #111;
         }
     </style>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-core.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-stock.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-annotations.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 {% endblock %}
 
 {% block body %}
@@ -92,7 +99,6 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script>
         var ajax = ajax || {};
         ajax.getJson = function(url, success, error) {
@@ -118,6 +124,7 @@
                 series: [],
                 addressId: null,
                 renderer: null,
+                apiEndpoint: null
             },
             watch: {
                 addressId: function(value) {
@@ -143,10 +150,4 @@
             }
         });
     </script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-core.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-stock.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-annotations.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
 {% endblock %}
