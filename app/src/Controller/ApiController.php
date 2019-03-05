@@ -4,17 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Address;
 use App\Repository\AddressRepository;
-use App\Repository\DataSetRepository;
 use Carbon\Carbon;
-use Doctrine\Common\Collections\Expr\Expression;
-use Doctrine\Common\Collections\ExpressionBuilder;
 use Doctrine\ORM\Query\Expr\Join;
+use PhpOffice\PhpSpreadsheet\Calculation\DateTime;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Yaml\Tests\A;
 
 /**
  * @Route("/api")
@@ -100,7 +97,12 @@ class ApiController extends AbstractController
             $avgSpeed = $row['amountVehicles'] > 0
                 ? round($row['speedProducts'] / $row['amountVehicles'], 2)
                 : null;
-            return [$row['dateTime']->format('Y-m-d H:i:s'), $avgSpeed];
+            return [
+                $row['dateTime']
+                    ->setTimeZone(new \DateTimeZone('UTC'))
+                    ->format('Y-m-d\TH:i:s\Z'),
+                $avgSpeed
+            ];
         }, $result);
         $filteredSpeeds = array_filter($response['data']['series'], function($row) {
             return $row[1] !== null;

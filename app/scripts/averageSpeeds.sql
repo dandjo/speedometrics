@@ -4,7 +4,7 @@ SELECT data_set.date_time,
 FROM data_set
 INNER JOIN speed_category
  ON data_set.id = speed_category.data_set_id
-WHERE data_set.address_id = 1
+WHERE data_set.address_id = 2
 GROUP BY data_set.id
 ORDER BY speed_category.range_to,
          data_set.date_time
