@@ -128,7 +128,7 @@ class ApiController extends AbstractController
         $dateFrom = $request->query->get('from');
         $dateTo = $request->query->get('to');
         $qb = $this->doctrine->getEntityManager()->createQueryBuilder()
-            ->select('CONCAT(speedCategories.rangeFrom, \' - \', speedCategories.rangeTo, \' km/h\') AS range')
+            ->select('CONCAT(speedCategories.rangeFrom, \' - \', speedCategories.rangeTo) AS range')
             ->addSelect('SUM(speedCategories.amountVehicles) AS amountVehicles')
             ->from('App\Entity\DataSet', 'data')
             ->join('data.speedCategories', 'speedCategories', Join::WITH)
