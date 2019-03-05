@@ -9,14 +9,12 @@
             chart.autoRedraw();
             var series = chart.line();
 
-            app.getseries = function(addressId) {
+            app.renderer = function(addressId) {
                 var urlParams = new URLSearchParams(window.location.search);
                 urlParams.set('address', addressId);
-                ajax.getJson('{{ path('api.average-speed.hour') }}?' + urlParams, function(xhr) {
+                ajax.getJson('{{ path('api.average-speed') }}?' + urlParams, function(xhr) {
                     series.data(xhr.response.data.series);
-                    document.title = 'Average Speed - ' + xhr.response.data.address.display;
-                    series.name(document.title);
-                    chart.title(document.title);
+                    series.name('Average Speed (' + xhr.response.data.summarized.average + ')');
                 });
             };
 

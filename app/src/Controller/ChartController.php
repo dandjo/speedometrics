@@ -19,19 +19,19 @@ class ChartController extends AbstractController
     }
 
     /**
-     * @Route("/average-speed/hour", name="charts.average-speed.hour")
+     * @Route("/average-speed", name="charts.average-speed")
      */
-    public function averageSpeedPerHour()
+    public function averageSpeed()
     {
-        return $this->render('charts/average-speed-hour.html.twig');
+        return $this->render('charts/average-speed.html.twig');
     }
 
     /**
-     * @Route("/average-speed/hour/stock", name="charts.average-speed.hour.stock")
+     * @Route("/average-speed/stock", name="charts.average-speed.stock")
      */
-    public function averageSpeedPerHourStock()
+    public function averageSpeedStock()
     {
-        return $this->render('charts/average-speed-hour-stock.html.twig');
+        return $this->render('charts/average-speed-stock.html.twig');
     }
 
     /**

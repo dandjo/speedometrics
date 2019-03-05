@@ -43,8 +43,8 @@ class ApiController extends AbstractController
     {
         return $this->json(['data' => ['items' => [
             ['link' => $this->generateUrl('charts.speed-categories'), 'title' => 'Speed Categories'],
-            ['link' => $this->generateUrl('charts.average-speed.hour'), 'title' => 'Average Speed'],
-            ['link' => $this->generateUrl('charts.average-speed.hour.stock'), 'title' => 'Average Speed Stock'],
+            ['link' => $this->generateUrl('charts.average-speed'), 'title' => 'Average Speed'],
+            ['link' => $this->generateUrl('charts.average-speed.stock'), 'title' => 'Average Speed Stock'],
         ]]]);
     }
 
@@ -62,11 +62,11 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/average-speed/hour", name="api.average-speed.hour")
+     * @Route("/average-speed/hour", name="api.average-speed")
      * @param Request $request
      * @return Response
      */
-    public function averageSpeedPerHour(Request $request): Response
+    public function averageSpeed(Request $request): Response
     {
         // Disclaimer: We assume the driven speed per measurement to be the
         // average of the speed category's rangeFrom and rangeTo.
@@ -95,12 +95,22 @@ class ApiController extends AbstractController
                 ->setParameter('from', Carbon::createFromFormat('Y-m-d', $dateFrom))
                 ->setParameter('to', Carbon::createFromFormat('Y-m-d', $dateTo));
         }
-        $response['data']['series'] = array_map(function($result) {
-            $avgSpeed = $result['amountVehicles'] > 0
-                ? round($result['speedProducts'] / $result['amountVehicles'], 2)
+        $result = $qb->getQuery()->getResult();
+        $response['data']['series'] = array_map(function($row) {
+            $avgSpeed = $row['amountVehicles'] > 0
+                ? round($row['speedProducts'] / $row['amountVehicles'], 2)
                 : null;
-            return [$result['dateTime']->format('Y-m-d H:i:s'), $avgSpeed];
-        }, $qb->getQuery()->getResult());
+            return [$row['dateTime']->format('Y-m-d H:i:s'), $avgSpeed];
+        }, $result);
+        $filteredSpeeds = array_filter($response['data']['series'], function($row) {
+            return $row[1] !== null;
+        });
+        $avgSpeeds = array_map(function($row) {
+            return $row[1];
+        }, $filteredSpeeds);
+        $response['data']['summarized']['average'] = round(array_sum($avgSpeeds) / count($filteredSpeeds), 2);
+        $response['data']['summarized']['min'] = min($avgSpeeds);
+        $response['data']['summarized']['max'] = max($avgSpeeds);
         return $this->json($response);
     }
 

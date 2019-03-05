@@ -6,7 +6,7 @@
         anychart.onDocumentReady(function() {
             var dataTable = anychart.data.table();
             var mapping = dataTable.mapAs();
-            mapping.addField('value', 0.5);
+            mapping.addField('value', 1);
             var chart = anychart.stock();
             var plot = chart.plot(0);
             var lineSeries = plot.line(mapping);
@@ -14,20 +14,20 @@
             controller.horizontalLine({
                 valueAnchor: 30
             });
-            controller.horizontalLine({
-                valueAnchor: 50
-            });
             chart.container('chart');
             chart.autoRedraw();
+            var hLine;
 
-            app.getseries = function(addressId) {
+            app.renderer = function(addressId) {
                 var urlParams = new URLSearchParams(window.location.search);
                 urlParams.set('address', addressId);
-                ajax.getJson('{{ path('api.average-speed.hour') }}?' + urlParams, function(xhr) {
-                    document.title = 'Average Speed Stock - ' + xhr.response.data.address.display;
-                    lineSeries.name(document.title);
-                    chart.title(document.title);
+                ajax.getJson('{{ path('api.average-speed') }}?' + urlParams, function(xhr) {
+                    lineSeries.name('Average Speed (' + xhr.response.data.summarized.average + ')');
                     dataTable.addData(xhr.response.data.series);
+                    controller.removeAnnotation(hLine);
+                    hLine = controller.horizontalLine({
+                        valueAnchor: xhr.response.data.summarized.average
+                    });
                 });
             };
 

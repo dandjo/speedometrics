@@ -76,11 +76,11 @@
 {% block body %}
     <div id="app">
         <div id="menu">
-            <ul>
-                <li v-cloak v-for="item in menu" v-bind:class="{ 'active': item.link == '{{ path(app.request.attributes.get('_route')) }}' }">
+            <ul v-cloak>
+                <li v-for="item in menu" v-bind:class="{ 'active': item.link == '{{ path(app.request.attributes.get('_route')) }}' }">
                     <a :href="item.link">${ item.title }</a>
                 </li>
-                <li v-cloak class="addresses">
+                <li class="addresses">
                     <select name="address" v-model="addressId">
                         <option v-for="address in addresses" :value="address.id">${ address.display }</option>
                     </select>
@@ -92,12 +92,6 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-core.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-stock.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-annotations.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script>
         var ajax = ajax || {};
@@ -123,18 +117,18 @@
                 addresses: [],
                 series: [],
                 addressId: null,
-            },
-            methods: {
-                getseries: function(addressId) {
-                    return [];
-                }
+                renderer: null,
             },
             watch: {
-                addressId: function(addressId) {
-                    var self = this;
-                    anychart.onDocumentReady(function() {
-                        self.getseries(addressId);
-                    });
+                addressId: function(value) {
+                    if (this.renderer) {
+                        this.renderer(value);
+                    }
+                },
+                renderer: function(value) {
+                    if (this.addressId) {
+                        value(this.addressId);
+                    }
                 }
             },
             created: function() {
@@ -149,4 +143,10 @@
             }
         });
     </script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-core.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-stock.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-annotations.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
 {% endblock %}
