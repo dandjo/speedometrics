@@ -17,7 +17,7 @@ services:
     web-debug:
         image: nginx:1.15
         depends_on:
-            - php-debug
+            - php
         volumes:
             - ./app:/app
             - ./config/nginx-base.conf:/etc/nginx/base.conf
@@ -35,15 +35,6 @@ services:
             - ./app:/app
             - /:/docker-host
             - ./config/php.ini:/usr/local/etc/php/conf.d/99-php.ini
-    php-debug:
-        build:
-            dockerfile: php-debug.dockerfile
-            context: .
-        volumes:
-            - ./app:/app
-            - /:/docker-host
-            - ./config/php.ini:/usr/local/etc/php/conf.d/99-php.ini
-            - ./config/xdebug.ini:/usr/local/etc/php/conf.d/99-xdebug.ini
     traefik:
         image: traefik
         command: -c /dev/null --web --docker --logLevel=INFO
