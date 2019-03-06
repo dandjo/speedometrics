@@ -22,7 +22,7 @@ Symfony 4 application for importing and aggregating data measured by stationary 
     $ php bin/console import:excel /path/to/excels \
       "street name" "house number" "zip code" "city name"
 
-## Import Data with Docker Compose
+## Import data with Docker Compose
 
 To access your host filesystem we created a mountpoint of the host filesystem
 root at `/docker-host/`. The path to your home directory therefore usually is
@@ -31,6 +31,12 @@ root at `/docker-host/`. The path to your home directory therefore usually is
     $ docker-compose run php /app/bin/console import:excel \
       /docker-host/path/to/excels \
       "street name" "house number" "zip code" "city name"
+
+## Import random data
+
+Random data gives you an idea of this product. Let's import 4 iterations.
+
+    $ docker-compose run php /app/bin/console import:random 4
 
 ## Frontend
 
