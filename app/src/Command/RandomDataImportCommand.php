@@ -46,7 +46,7 @@ class RandomDataImportCommand extends Command
         $this
             ->setName('import:random')
             ->setDescription('Imports random data')
-            ->addArgument('iterations', InputArgument::OPTIONAL, 'Amount of iterations', 0)
+            ->addArgument('iterations', InputArgument::OPTIONAL, 'Amount of iterations', 1)
         ;
     }
 
