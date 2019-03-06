@@ -57,6 +57,13 @@ class RandomDataImportCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $speedWeight = [
+            [1, 3, 6, 10, 32, 26, 18, 12, 8, 5, 4, 3, 2, 1], // typical T30
+            [1, 2, 5, 6, 8, 7, 16, 20, 28, 34, 26, 14, 6, 3], // typical T50
+        ];
+        $hourWeight = [
+            1, 1, 1, 1, 1, 1, 2, 8, 6, 4, 2, 1, 1, 1, 1, 2, 3, 5, 6, 5, 2, 1, 1, 1
+        ];
         for ($iter = 0; $iter < intval($input->getArgument('iterations')); $iter++) {
             $address = new Address();
             $address->setStreet(implode(' ', [
@@ -95,15 +102,12 @@ class RandomDataImportCommand extends Command
                 (new Carbon())->format('Y-m-d') . '00:00:00'
             );
             for ($i = 0; $i < 336; $i++) { // 14 days
+                $hour = intval($dateTime->format('H'));
                 $dataSet = new DataSet();
                 $dataSet->setDateTime(clone $dateTime);
                 $dataSet->setAddress($address);
                 $minimumSpeed = 15;
                 $speedDistance = 5;
-                $weights = [
-                    [1, 3, 6, 10, 32, 26, 18, 12, 8, 5, 4, 3, 2, 1], // typical T30
-                    [1, 2, 5, 6, 8, 7, 16, 20, 28, 34, 26, 14, 6, 3], // typical T50
-                ];
                 for ($r = 0; $r < 22; $r++) {
                     $rangeFrom = $r === 0 ? 0 : $minimumSpeed + ($speedDistance * ($r - 1));
                     $rangeTo = $minimumSpeed + ($speedDistance * $r);
@@ -111,7 +115,7 @@ class RandomDataImportCommand extends Command
                     $speedCategory->setDataSet($dataSet);
                     $speedCategory->setRangeFrom($rangeFrom);
                     $speedCategory->setRangeTo($rangeTo);
-                    $speedCategory->setAmountVehicles(intval(random_int(1, 10) * ($weights[$iter % 2][$r] ?? 0) / 10));
+                    $speedCategory->setAmountVehicles(intval(random_int(1, 10) * ($speedWeight[$iter % 2][$r] ?? 0) * $hourWeight[$hour] / 10));
                     $this->doctrine->getManager()->persist($speedCategory);
                 }
                 $this->doctrine->getManager()->persist($dataSet);
