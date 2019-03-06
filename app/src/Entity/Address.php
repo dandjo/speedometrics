@@ -131,4 +131,26 @@ class Address
 
         return $this;
     }
+
+    public function toString(): string
+    {
+        return sprintf('%s %s, %s %s',
+            $this->getStreet(),
+            $this->getNumber(),
+            $this->getZip(),
+            $this->getCity()
+        );
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'street' => $this->getStreet(),
+            'number' => $this->getNumber(),
+            'city' => $this->getCity(),
+            'zip' => $this->getZip(),
+            'serialized' => $this->toString(),
+        ];
+    }
 }

@@ -19,7 +19,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ExcelImport extends Command
+class ExcelImportCommand extends Command
 {
     /**
      * @var RegistryInterface
@@ -51,8 +51,7 @@ class ExcelImport extends Command
     {
         $this
             ->setName('import:excel')
-            ->setDescription('')
-            ->setHelp('')
+            ->setDescription('Imports data from excel files in a given directory')
             ->addArgument('directory', InputArgument::REQUIRED, 'The directory of your excel files')
             ->addArgument('street', InputArgument::REQUIRED, 'The location street')
             ->addArgument('number', InputArgument::REQUIRED, 'The location number')
@@ -68,7 +67,6 @@ class ExcelImport extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // get or create address
         $street = $input->getArgument('street');
         $number = $input->getArgument('number');
         $zip = $input->getArgument('zip');
@@ -97,16 +95,16 @@ class ExcelImport extends Command
         }
         $this->doctrine->getManager()->flush();
         $this->logger->info('Memory used: ' . memory_get_peak_usage() . ' bytes');
-
     }
 
     /**
-     * @param $filename
+     * @param string $filename
      * @param Address $address
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
-    protected function importFile($filename, Address $address) {
+    protected function importFile(string $filename, Address $address)
+    {
         $reader = IOFactory::createReader('Xls');
         $spreadSheet = $reader->load($filename);
         $rows = $spreadSheet->getActiveSheet()->toArray();

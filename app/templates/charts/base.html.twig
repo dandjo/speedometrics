@@ -89,7 +89,7 @@
                 </li>
                 <li class="addresses">
                     <select name="address" v-model="addressId">
-                        <option v-for="address in addresses" :value="address.id">${ address.display }</option>
+                        <option v-for="address in addresses" :value="address.id">${ address.serialized }</option>
                     </select>
                 </li>
             </ul>

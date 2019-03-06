@@ -53,7 +53,7 @@ class ApiController extends AbstractController
     {
         $addresses = (new AddressRepository($this->doctrine))->findAll();
         $response['data']['addresses'] = array_map(function($address) {
-            return $this->serializeAddress($address);
+            return $address->toArray();
         }, $addresses);
         return $this->json($response);
     }
@@ -70,7 +70,7 @@ class ApiController extends AbstractController
         $response = ['data' => []];
         $addressId = $request->query->get('address');
         $address = (new AddressRepository($this->doctrine))->find($addressId);
-        $response['data']['address'] = $this->serializeAddress($address);
+        $response['data']['address'] = $address->toArray();
         $dateFrom = $request->query->get('from');
         $dateTo = $request->query->get('to');
         $qb = $this->doctrine->getEntityManager()->createQueryBuilder();
@@ -126,7 +126,7 @@ class ApiController extends AbstractController
         $response = ['data' => []];
         $addressId = $request->query->get('address');
         $address = (new AddressRepository($this->doctrine))->find($addressId);
-        $response['data']['address'] = $this->serializeAddress($address);
+        $response['data']['address'] = $address->toArray();
         $dateFrom = $request->query->get('from');
         $dateTo = $request->query->get('to');
         $qb = $this->doctrine->getEntityManager()->createQueryBuilder()
@@ -147,27 +147,5 @@ class ApiController extends AbstractController
             return [$result['range'], intval($result['amountVehicles'])];
         }, $qb->getQuery()->getResult());
         return $this->json($response);
-    }
-
-    /**
-     * @param Address $address
-     * @return array
-     */
-    protected function serializeAddress(Address $address): array
-    {
-        return [
-            'id' => $address->getId(),
-            'street' => $address->getStreet(),
-            'number' => $address->getNumber(),
-            'city' => $address->getCity(),
-            'zip' => $address->getZip(),
-            'display' => sprintf(
-                '%s %s, %s %s',
-                $address->getStreet(),
-                $address->getNumber(),
-                $address->getZip(),
-                $address->getCity()
-            ),
-        ];
     }
 }
