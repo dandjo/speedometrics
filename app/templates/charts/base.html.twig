@@ -2,8 +2,10 @@
 
 {% block head %}
     <title>Speedometrics</title>
-    <link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css" rel="stylesheet" type="text/css">
-    <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.css" rel="stylesheet" type="text/css">
+    <script src="/assets/anychart-bundle.min.js"></script>
+    <script src="/assets/vue.js"></script>
+    <link href="/assets/anychart-ui.min.css" rel="stylesheet" type="text/css">
+    <link href="/assets/anychart-font.css" rel="stylesheet" type="text/css">
     <style>
         [v-cloak] {
             visibility: hidden;
@@ -71,13 +73,6 @@
             background-color: #111;
         }
     </style>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-core.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-stock.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-annotations.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 {% endblock %}
 
 {% block body %}
@@ -121,10 +116,8 @@
             data: {
                 menu: [],
                 addresses: [],
-                series: [],
                 addressId: null,
                 renderer: null,
-                apiEndpoint: null
             },
             watch: {
                 addressId: function(value) {

@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190301162126 extends AbstractMigration
+final class Version20190306234457 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,11 +22,11 @@ final class Version20190301162126 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'sqlite', 'Migration can only be executed safely on \'sqlite\'.');
 
-        $this->addSql('CREATE TABLE speed_category (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, data_set_id INTEGER NOT NULL, range_from INTEGER NOT NULL, range_to INTEGER NOT NULL, amount_vehicles INTEGER NOT NULL)');
-        $this->addSql('CREATE INDEX IDX_7ABA5EBA70053C01 ON speed_category (data_set_id)');
-        $this->addSql('CREATE TABLE data_set (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, address_id INTEGER NOT NULL, date_time DATETIME NOT NULL)');
-        $this->addSql('CREATE INDEX IDX_A298C469F5B7AF75 ON data_set (address_id)');
         $this->addSql('CREATE TABLE address (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, street VARCHAR(255) NOT NULL, city VARCHAR(255) DEFAULT NULL, number VARCHAR(255) NOT NULL, zip VARCHAR(255) DEFAULT NULL)');
+        $this->addSql('CREATE TABLE date_time_container (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, address_id INTEGER NOT NULL, date_time DATETIME NOT NULL)');
+        $this->addSql('CREATE INDEX IDX_5AAF2086F5B7AF75 ON date_time_container (address_id)');
+        $this->addSql('CREATE TABLE speed_metric (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, date_time_container_id INTEGER NOT NULL, min_speed INTEGER NOT NULL, max_speed INTEGER NOT NULL, amount_vehicles INTEGER NOT NULL)');
+        $this->addSql('CREATE INDEX IDX_4031741850143883 ON speed_metric (date_time_container_id)');
     }
 
     public function down(Schema $schema) : void
@@ -34,8 +34,8 @@ final class Version20190301162126 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'sqlite', 'Migration can only be executed safely on \'sqlite\'.');
 
-        $this->addSql('DROP TABLE speed_category');
-        $this->addSql('DROP TABLE data_set');
         $this->addSql('DROP TABLE address');
+        $this->addSql('DROP TABLE date_time_container');
+        $this->addSql('DROP TABLE speed_metric');
     }
 }

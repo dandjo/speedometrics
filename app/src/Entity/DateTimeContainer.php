@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\DataSetRepository")
+ * @ORM\Entity(repositoryClass="DateTimeContainerRepository")
  */
-class DataSet
+class DateTimeContainer
 {
     /**
      * @ORM\Id()
@@ -19,15 +19,15 @@ class DataSet
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Address", inversedBy="dataSets")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Address", inversedBy="dateTimeContainers")
      * @ORM\JoinColumn(nullable=false)
      */
     private $address;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SpeedCategory", mappedBy="dataSet", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="SpeedMetric", mappedBy="dateTimeContainer", orphanRemoval=true)
      */
-    private $speedCategories;
+    private $speedMetrics;
 
     /**
      * @ORM\Column(type="datetimetz")
@@ -36,7 +36,7 @@ class DataSet
 
     public function __construct()
     {
-        $this->speedCategories = new ArrayCollection();
+        $this->speedMetrics = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -57,30 +57,30 @@ class DataSet
     }
 
     /**
-     * @return Collection|SpeedCategory[]
+     * @return Collection|SpeedMetric[]
      */
-    public function getSpeedCategories(): Collection
+    public function getSpeedMetrics(): Collection
     {
-        return $this->speedCategories;
+        return $this->speedMetrics;
     }
 
-    public function addSpeedCategory(SpeedCategory $speedCategory): self
+    public function addSpeedMetric(SpeedMetric $speedMetric): self
     {
-        if (!$this->speedCategories->contains($speedCategory)) {
-            $this->speedCategories[] = $speedCategory;
-            $speedCategory->setDataSet($this);
+        if (!$this->speedMetrics->contains($speedMetric)) {
+            $this->speedMetrics[] = $speedMetric;
+            $speedMetric->setDateTimeContainer($this);
         }
 
         return $this;
     }
 
-    public function removeSpeedCategory(SpeedCategory $speedCategory): self
+    public function removeSpeedMetric(SpeedMetric $speedMetric): self
     {
-        if ($this->speedCategories->contains($speedCategory)) {
-            $this->speedCategories->removeElement($speedCategory);
+        if ($this->speedMetrics->contains($speedMetric)) {
+            $this->speedMetrics->removeElement($speedMetric);
             // set the owning side to null (unless already changed)
-            if ($speedCategory->getDataSet() === $this) {
-                $speedCategory->setDataSet(null);
+            if ($speedMetric->getDateTimeContainer() === $this) {
+                $speedMetric->setDateTimeContainer(null);
             }
         }
 

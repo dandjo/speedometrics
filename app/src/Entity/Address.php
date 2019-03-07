@@ -39,13 +39,13 @@ class Address
     private $zip;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\DataSet", mappedBy="address", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="DateTimeContainer", mappedBy="address", orphanRemoval=true)
      */
-    private $dataSets;
+    private $dateTimeContainers;
 
     public function __construct()
     {
-        $this->dataSets = new ArrayCollection();
+        $this->dateTimeContainers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -90,30 +90,30 @@ class Address
     }
 
     /**
-     * @return Collection|DataSet[]
+     * @return Collection|DateTimeContainer[]
      */
-    public function getDataSets(): Collection
+    public function getDateTimeContainers(): Collection
     {
-        return $this->dataSets;
+        return $this->dateTimeContainers;
     }
 
-    public function addDataSet(DataSet $dataSet): self
+    public function addDateTimeContainer(DateTimeContainer $dateTimeContainer): self
     {
-        if (!$this->dataSets->contains($dataSet)) {
-            $this->dataSets[] = $dataSet;
-            $dataSet->setAddress($this);
+        if (!$this->dateTimeContainers->contains($dateTimeContainer)) {
+            $this->dateTimeContainers[] = $dateTimeContainer;
+            $dateTimeContainer->setAddress($this);
         }
 
         return $this;
     }
 
-    public function removeDataSet(DataSet $dataSet): self
+    public function removeDateTimeContainer(DateTimeContainer $dateTimeContainer): self
     {
-        if ($this->dataSets->contains($dataSet)) {
-            $this->dataSets->removeElement($dataSet);
+        if ($this->dateTimeContainers->contains($dateTimeContainer)) {
+            $this->dateTimeContainers->removeElement($dateTimeContainer);
             // set the owning side to null (unless already changed)
-            if ($dataSet->getAddress() === $this) {
-                $dataSet->setAddress(null);
+            if ($dateTimeContainer->getAddress() === $this) {
+                $dateTimeContainer->setAddress(null);
             }
         }
 

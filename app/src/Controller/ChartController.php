@@ -35,10 +35,10 @@ class ChartController extends AbstractController
     }
 
     /**
-     * @Route("/speed-categories", name="charts.speed-categories")
+     * @Route("/speed-metrics", name="charts.speed-metrics")
      */
-    public function speedCategories()
+    public function speedMetrics()
     {
-        return $this->render('charts/speed-categories.html.twig');
+        return $this->render('charts/speed-metrics.html.twig');
     }
 }

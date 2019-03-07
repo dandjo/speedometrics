@@ -3,8 +3,8 @@
 namespace App\Command;
 
 use App\Entity\Address;
-use App\Entity\DataSet;
-use App\Entity\SpeedCategory;
+use App\Entity\DateTimeContainer;
+use App\Entity\SpeedMetric;
 use Carbon\Carbon;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -103,22 +103,22 @@ class RandomDataImportCommand extends Command
             );
             for ($i = 0; $i < 336; $i++) { // 14 days
                 $hour = intval($dateTime->format('H'));
-                $dataSet = new DataSet();
-                $dataSet->setDateTime(clone $dateTime);
-                $dataSet->setAddress($address);
+                $dateTImeCOntainer = new DateTimeContainer();
+                $dateTImeCOntainer->setDateTime(clone $dateTime);
+                $dateTImeCOntainer->setAddress($address);
                 $minimumSpeed = 15;
                 $speedDistance = 5;
                 for ($r = 0; $r < 22; $r++) {
-                    $rangeFrom = $r === 0 ? 0 : $minimumSpeed + ($speedDistance * ($r - 1));
-                    $rangeTo = $minimumSpeed + ($speedDistance * $r);
-                    $speedCategory = new SpeedCategory();
-                    $speedCategory->setDataSet($dataSet);
-                    $speedCategory->setRangeFrom($rangeFrom);
-                    $speedCategory->setRangeTo($rangeTo);
-                    $speedCategory->setAmountVehicles(intval(random_int(1, 10) * ($speedWeight[$iter % 2][$r] ?? 0) * $hourWeight[$hour] / 10));
-                    $this->doctrine->getManager()->persist($speedCategory);
+                    $minSpeed = $r === 0 ? 0 : $minimumSpeed + ($speedDistance * ($r - 1));
+                    $maxSpeed = $minimumSpeed + ($speedDistance * $r);
+                    $speedMetric = new SpeedMetric();
+                    $speedMetric->setDateTimeContainer($dateTImeCOntainer);
+                    $speedMetric->setMinSpeed($minSpeed);
+                    $speedMetric->setMaxSpeed($maxSpeed);
+                    $speedMetric->setAmountVehicles(intval(random_int(1, 10) * ($speedWeight[$iter % 2][$r] ?? 0) * $hourWeight[$hour] / 10));
+                    $this->doctrine->getManager()->persist($speedMetric);
                 }
-                $this->doctrine->getManager()->persist($dataSet);
+                $this->doctrine->getManager()->persist($dateTImeCOntainer);
                 $dateTime->addHour();
             }
             $this->doctrine->getManager()->flush();

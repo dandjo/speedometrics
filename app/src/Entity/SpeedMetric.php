@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\SpeedCategoryRepository")
+ * @ORM\Entity(repositoryClass="SpeedMetricRepository")
  */
-class SpeedCategory
+class SpeedMetric
 {
     /**
      * @ORM\Id()
@@ -19,12 +19,12 @@ class SpeedCategory
     /**
      * @ORM\Column(type="integer")
      */
-    private $rangeFrom;
+    private $minSpeed;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $rangeTo;
+    private $maxSpeed;
 
     /**
      * @ORM\Column(type="integer")
@@ -32,36 +32,36 @@ class SpeedCategory
     private $amountVehicles;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\DataSet", inversedBy="speedCategories")
+     * @ORM\ManyToOne(targetEntity="DateTimeContainer", inversedBy="speedMetrics")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $dataSet;
+    private $dateTimeContainer;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getRangeFrom(): ?int
+    public function getMinSpeed(): ?int
     {
-        return $this->rangeFrom;
+        return $this->minSpeed;
     }
 
-    public function setRangeFrom(int $rangeFrom): self
+    public function setMinSpeed(int $minSpeed): self
     {
-        $this->rangeFrom = $rangeFrom;
+        $this->minSpeed = $minSpeed;
 
         return $this;
     }
 
-    public function getRangeTo(): ?int
+    public function getMaxSpeed(): ?int
     {
-        return $this->rangeTo;
+        return $this->maxSpeed;
     }
 
-    public function setRangeTo(int $rangeTo): self
+    public function setMaxSpeed(int $maxSpeed): self
     {
-        $this->rangeTo = $rangeTo;
+        $this->maxSpeed = $maxSpeed;
 
         return $this;
     }
@@ -78,14 +78,14 @@ class SpeedCategory
         return $this;
     }
 
-    public function getDataSet(): ?DataSet
+    public function getDateTimeContainer(): ?DateTimeContainer
     {
-        return $this->dataSet;
+        return $this->dateTimeContainer;
     }
 
-    public function setDataSet(?DataSet $dataSet): self
+    public function setDateTimeContainer(?DateTimeContainer $dateTimeContainer): self
     {
-        $this->dataSet = $dataSet;
+        $this->dateTimeContainer = $dateTimeContainer;
 
         return $this;
     }

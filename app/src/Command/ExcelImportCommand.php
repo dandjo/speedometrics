@@ -3,11 +3,11 @@
 namespace App\Command;
 
 use App\Entity\Address;
-use App\Entity\DataSet;
-use App\Entity\SpeedCategory;
+use App\Entity\DateTimeContainer;
+use App\Entity\SpeedMetric;
 use App\Repository\AddressRepository;
-use App\Repository\DataSetRepository;
-use App\Repository\SpeedCategoryRepository;
+use App\Repository\DateTimeContainerRepository;
+use App\Repository\SpeedMetricRepository;
 use Carbon\Carbon;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
@@ -125,35 +125,35 @@ class ExcelImportCommand extends Command
                 continue;
             }
             $this->logger->info($dateTime->format('c'));
-            $dataSet = (new DataSetRepository($this->doctrine))->findOneBy([
+            $dateTimeContainer = (new DateTimeContainerRepository($this->doctrine))->findOneBy([
                 'dateTime' => $dateTime,
                 'address' => $address,
             ]);
-            if (empty($dataSet)) {
-                $dataSet = new DataSet();
+            if (empty($dateTimeContainer)) {
+                $dateTimeContainer = new DateTimeContainer();
             }
-            $dataSet->setDateTime($dateTime);
-            $dataSet->setAddress($address);
+            $dateTimeContainer->setDateTime($dateTime);
+            $dateTimeContainer->setAddress($address);
             $minimumSpeed = 15;
             $speedDistance = 5;
             for ($r = 0; $r <  22; $r++) {
-                $rangeFrom = $r === 0 ? 0 : $minimumSpeed + ($speedDistance * ($r - 1));
-                $rangeTo = $minimumSpeed + ($speedDistance * $r);
-                $speedCategory = (new SpeedCategoryRepository($this->doctrine))->findOneBy([
-                    'dataSet' => $dataSet,
-                    'rangeFrom' => $rangeFrom,
-                    'rangeTo' => $rangeTo,
+                $minSpeed = $r === 0 ? 0 : $minimumSpeed + ($speedDistance * ($r - 1));
+                $maxSpeed = $minimumSpeed + ($speedDistance * $r);
+                $speedMetric = (new SpeedMetricRepository($this->doctrine))->findOneBy([
+                    'dateTimeContainer' => $dateTimeContainer,
+                    'minSpeed' => $minSpeed,
+                    'maxSpeed' => $maxSpeed,
                 ]);
-                if (empty($speedCategory)) {
-                    $speedCategory = new SpeedCategory();
+                if (empty($speedMetric)) {
+                    $speedMetric = new SpeedMetric();
                 }
-                $speedCategory->setDataSet($dataSet);
-                $speedCategory->setRangeFrom($rangeFrom);
-                $speedCategory->setRangeTo($rangeTo);
-                $speedCategory->setAmountVehicles(intval(trim($row[$r])));
-                $this->doctrine->getManager()->persist($speedCategory);
+                $speedMetric->setDateTimeContainer($dateTimeContainer);
+                $speedMetric->setMinSpeed($minSpeed);
+                $speedMetric->setMaxSpeed($maxSpeed);
+                $speedMetric->setAmountVehicles(intval(trim($row[$r])));
+                $this->doctrine->getManager()->persist($speedMetric);
             }
-            $this->doctrine->getManager()->persist($dataSet);
+            $this->doctrine->getManager()->persist($dateTimeContainer);
         }
     }
 }

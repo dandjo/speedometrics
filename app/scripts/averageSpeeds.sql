@@ -1,10 +1,10 @@
-SELECT data_set.date_time,
-       SUM((speed_category.range_from + speed_category.range_to) / 2 * speed_category.amount_vehicles)
-         / SUM(speed_category.amount_vehicles) AS avg_speed
-FROM data_set
-INNER JOIN speed_category
- ON data_set.id = speed_category.data_set_id
-WHERE data_set.address_id = 2
-GROUP BY data_set.id
-ORDER BY speed_category.range_to,
-         data_set.date_time
+SELECT date_time_container.date_time,
+       SUM((speed_metric.min_speed + speed_metric.max_speed) / 2 * speed_metric.amount_vehicles)
+         / SUM(speed_metric.amount_vehicles) AS avg_speed
+FROM date_time_container
+INNER JOIN speed_metric
+ ON date_time_container.id = speed_metric.date_time_container_id
+WHERE date_time_container.address_id = 2
+GROUP BY date_time_container.id
+ORDER BY speed_metric.max_speed,
+         date_time_container.date_time
