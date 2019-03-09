@@ -9,7 +9,7 @@ Symfony 4 application for importing and aggregating data measured by stationary 
     $ docker-compose run php /app/bin/console -n doctrine:database:create
     $ docker-compose run php /app/bin/console -n doctrine:migrations:migrate
 
-## Import Data
+## Import data
 
 To access your host filesystem we created a mountpoint of the host filesystem
 root at `/docker-host/`. The path to your home directory therefore usually is
